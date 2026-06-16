@@ -8,8 +8,10 @@ One page. Full detail in `README.md`; setup detail in `INSTALL.md`.
 claude plugin marketplace add /absolute/path/to/design-harness-marketplace
 claude plugin install design-harness@design-harness-marketplace --scope project
 mkdir -p .claude/rules notes/design-harness/proofs
-cp "$(claude plugin path design-harness)"/rules-templates/*.md .claude/rules/
-cat "$(claude plugin path design-harness)"/templates/CLAUDE.snippet.md >> CLAUDE.md
+# HARNESS = the plugin bundle you cloned (holds rules-templates/ and templates/)
+HARNESS=/absolute/path/to/design-harness-marketplace/design-harness
+cp "$HARNESS"/rules-templates/*.md .claude/rules/
+cat "$HARNESS"/templates/CLAUDE.snippet.md >> CLAUDE.md
 npm i -D playwright && npx playwright install chromium   # + brew install ffmpeg for GIFs
 ```
 

@@ -18,13 +18,15 @@ run `claude plugin marketplace add <owner>/<repo>`.
 ## 2. Set up a project repo
 
 ```bash
+# point HARNESS at the plugin bundle you cloned (holds rules-templates/, templates/, scripts/)
+HARNESS=/absolute/path/to/design-harness-marketplace/design-harness
+
 # 1. drop the three rule files where CLAUDE.md / the skills expect them
 mkdir -p .claude/rules
-cp "$(claude plugin path design-harness)"/rules-templates/*.md .claude/rules/
-#   (or copy from this bundle's design-harness/rules-templates/)
+cp "$HARNESS"/rules-templates/*.md .claude/rules/
 
 # 2. wire the always-on baseline: append the snippet to your CLAUDE.md
-cat "$(claude plugin path design-harness)"/templates/CLAUDE.snippet.md >> CLAUDE.md
+cat "$HARNESS"/templates/CLAUDE.snippet.md >> CLAUDE.md
 
 # 3. install the proof toolchain
 npm i -D playwright && npx playwright install chromium
@@ -60,11 +62,11 @@ In Claude Code:
 ## Verifying the proof script directly
 
 ```bash
-# sanity check the report format without a browser
-node "$(claude plugin path design-harness)"/scripts/proof.mjs --selftest
+# sanity check the report format without a browser ($HARNESS from step 2 above)
+node "$HARNESS"/scripts/proof.mjs --selftest
 
 # a real capture (dev server must be running)
-node .../scripts/proof.mjs --url http://localhost:3000/library \
+node "$HARNESS"/scripts/proof.mjs --url http://localhost:3000/library \
   --route /library --mode interactive --slug library-dropup --base main --pid <devpid>
 ```
 

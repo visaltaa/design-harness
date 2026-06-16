@@ -25,8 +25,8 @@ import { execSync } from "node:child_process";
 function allow() { process.exit(0); } // emit nothing => default permission flow
 function deny(reason) {
   process.stdout.write(JSON.stringify({
-    hookEventName: "PreToolUse",
     hookSpecificOutput: {
+      hookEventName: "PreToolUse",
       permissionDecision: "deny",
       permissionDecisionReason: reason,
     },

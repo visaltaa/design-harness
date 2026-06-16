@@ -11,12 +11,7 @@
     {
       "name": "design-harness",
       "source": "./design-harness",
-      "description": "Agentic design harness for exploring and verifying complex UI workflows with Claude: portable visual baseline + an evolving design-system test suite + a worktree -> build -> Playwright-proof -> verify -> approve loop.",
-      "version": "0.1.0",
-      "author": {
-        "name": "Visal",
-        "email": "visal@thirdaiautomation.com"
-      }
+      "description": "Agentic design harness for exploring and verifying complex UI workflows with Claude: portable visual baseline + an evolving design-system test suite + a worktree -> build -> Playwright-proof -> verify -> approve loop."
     }
   ]
 }
