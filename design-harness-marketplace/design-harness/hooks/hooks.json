@@ -1,0 +1,29 @@
+{
+  "description": "Design harness: session banner (SessionStart) + a proof-gate that blocks merging into the base branch unless a fresh, passing design-check proof exists (PreToolUse on Bash).",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/hooks/session-banner.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/approve-gate.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
