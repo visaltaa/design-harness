@@ -1,8 +1,20 @@
+<div align="center">
+
 # design-harness
 
-An agentic design harness for Claude Code: explore complex UI workflows, build them
-on isolated worktrees, prove the work with Playwright, and let approvals feed
-learnings back into a design system that doubles as a test suite.
+**Agentic design harness for Claude Code** — explore complex UI, build it on isolated
+worktrees, **prove it with Playwright**, and harden a design system that doubles as a
+test suite.
+
+<p>
+  <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-d97757">
+  <img alt="version" src="https://img.shields.io/badge/version-0.1.0-3b82f6">
+  <img alt="license" src="https://img.shields.io/badge/license-MIT-22c55e">
+  <img alt="proof" src="https://img.shields.io/badge/proof-Playwright%20%2B%20axe-2ea44f?logo=playwright&logoColor=white">
+  <img alt="node" src="https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white">
+</p>
+
+</div>
 
 It's a **plugin** — a bundle of skills, slash commands, hooks, and one Playwright
 script. The only code is `scripts/proof.mjs`; everything else is markdown that
@@ -150,6 +162,69 @@ branch with `git merge main` is never blocked. Tune it with environment variable
 
 The plugin is a thin orchestration layer: markdown steers Claude, one script does
 the deterministic capture, and two hooks wire it into every session.
+
+```mermaid
+flowchart TB
+  orch["<b>/design-harness:design-feature</b> · orchestrator<br/>Spec → [Explore] → Build → Prove → Approve"]
+
+  subgraph loop["the loop"]
+    direction LR
+    ctx["<b>design-context</b><br/>Layer 2 · scope → spec"]
+    build["<b>build</b><br/>git worktree · vs spec"]
+    check["<b>design-check</b><br/>Layer 3 · prove + verify"]
+    gate{"FAIL = 0?"}
+    approve["<b>approve</b><br/>merge + harden"]
+    ctx --> build --> check --> gate
+    gate -->|pass| approve
+  end
+
+  orch -.->|chains the loop| ctx
+
+  explore["/design-harness:explore<br/>variants · optional"]
+  build -.-> explore
+
+  proof["proof.mjs · Playwright"]
+  artifacts["proof/ · gif · frames<br/>checks.json · report.md"]
+  verify["verify · ui-ux-pro-max + axe + DS-*"]
+  check --> proof --> artifacts --> verify
+
+  hook["approve-gate.mjs hook<br/>PreToolUse on Bash"]
+  hook -.->|gates merge| gate
+
+  subgraph kb["Layer 1 · Knowledge base — .claude/rules/ ← rules-templates/"]
+    direction LR
+    vb["<b>visual-baseline.md</b><br/>VB-* · portable floor"]
+    ds["<b>design-system.md</b><br/>DS-* · rules → tests"]
+    pc["<b>product-context.md</b><br/>what & why · glossary"]
+  end
+
+  approve -->|"harden · new DS-* + session-log"| kb
+  kb -->|reads| ctx
+
+  classDef purple fill:#ede9fe,stroke:#7c3aed,color:#3b0764;
+  classDef blue fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+  classDef orange fill:#ffedd5,stroke:#ea580c,color:#7c2d12;
+  classDef green fill:#dcfce7,stroke:#16a34a,color:#14532d;
+  classDef red fill:#fee2e2,stroke:#dc2626,color:#7f1d1d;
+  classDef cyan fill:#cffafe,stroke:#0891b2,color:#164e63;
+  classDef magenta fill:#fae8ff,stroke:#c026d3,color:#701a75;
+  classDef yellow fill:#fef9c3,stroke:#ca8a04,color:#713f12;
+
+  class orch purple
+  class ctx purple
+  class build blue
+  class check orange
+  class gate red
+  class approve green
+  class explore yellow
+  class proof blue
+  class artifacts cyan
+  class verify magenta
+  class hook red
+  class vb blue
+  class ds orange
+  class pc cyan
+```
 
 ### Components
 
