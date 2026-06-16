@@ -11,7 +11,7 @@
  *   - checks.json                   (axe-core + baseline DOM audit results)
  *   - report.md                     (STUB: header, changelog, automated checks, links)
  *
- * It does NOT pass final design judgment — the /design-check skill reads
+ * It does NOT pass final design judgment — the /design-harness:design-check skill reads
  * checks.json + the frames, evaluates the design-system / visual-baseline rules,
  * and overwrites report.md's tally with the final "PASS: n rules · FAIL: m".
  *
@@ -218,7 +218,7 @@ async function main() {
     const s = summarizeChecks(sample);
     const report = renderReport({
       label: "/library", iso: isoNow(), git,
-      tally: `Automated: ${s.pass}/${s.total} checks pass · design rules PENDING — run /design-check to finalize.`,
+      tally: `Automated: ${s.pass}/${s.total} checks pass · design rules PENDING — run /design-harness:design-check to finalize.`,
       autoChecks: s.lines, failures: [], absDir: path.join(cwd, "notes/design-harness/proofs/SAMPLE"),
       proofMain: "flow.gif", frameCount: 6, url: "http://localhost:3000/library", pid: 99608,
     });
@@ -349,7 +349,7 @@ async function main() {
   const git = gitInfo(cwd, args.base);
   const report = renderReport({
     label, iso: isoNow(), git,
-    tally: `Automated: ${s.pass}/${s.total} checks pass · design rules PENDING — run /design-check to finalize.`,
+    tally: `Automated: ${s.pass}/${s.total} checks pass · design rules PENDING — run /design-harness:design-check to finalize.`,
     autoChecks: s.lines, failures: [], absDir, proofMain, frameCount,
     url: args.url, pid: args.pid,
   });

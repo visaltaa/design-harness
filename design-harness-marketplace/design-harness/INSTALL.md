@@ -51,12 +51,12 @@ cd ../wt-my-feature
 In Claude Code:
 
 1. Describe the work. `design-context` should fire — answer its questions.
-   Optionally `/explore my idea n=3` to compare variants, then reconverge.
+   Optionally `/design-harness:explore my idea n=3` to compare variants, then reconverge.
 2. Build it.
-3. `/design-check` — it starts the dev server, captures the proof to
+3. `/design-harness:design-check` — it starts the dev server, captures the proof to
    `notes/design-harness/proofs/<date-slug>/`, verifies against the rules, and
    prints the `design-check report` with a `file://` proof link and a live preview.
-4. If clean (`FAIL: 0`), run `/approve "what & why"`. It merges, appends to
+4. If clean (`FAIL: 0`), run `/design-harness:approve "what & why"`. It merges, appends to
    `notes/session-log.md`, and adds any new `DS-*` rules to your design system.
 
 ## Verifying the proof script directly

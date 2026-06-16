@@ -10,7 +10,7 @@ allowed-tools:
   - Write
 ---
 
-# /explore — fan out variants, then reconverge (Layer 2)
+# /design-harness:explore — fan out variants, then reconverge (Layer 2)
 
 Explore the design space for: **$ARGUMENTS**
 (If a trailing `n=<number>` is present, produce that many variants; default 3.)
@@ -50,7 +50,7 @@ interaction"). Offer your recommendation first. Capture any constraint they add.
 Write the chosen direction as a brief and append it under "Pending briefs" in
 `product-context.md` (status: proposed):
 - goal, the pattern it mirrors, required states (loading/empty/error/populated),
-  applicable DS-*/VB-* rules, and acceptance criteria for `/design-check`.
+  applicable DS-*/VB-* rules, and acceptance criteria for `/design-harness:design-check`.
 
 Close by reminding the user: build it on a dedicated worktree/branch, then run
-`/design-check` to prove it.
+`/design-harness:design-check` to prove it.
