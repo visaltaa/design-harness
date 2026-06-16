@@ -3,7 +3,7 @@
 //
 // Blocks `git merge` of a feature branch INTO the base branch unless a fresh,
 // passing design-check proof (a report.md containing "FAIL: 0") exists. This is
-// the deterministic backstop for "never approve without proof"; the /approve
+// the deterministic backstop for "never approve without proof"; the /design-harness:approve
 // command also checks, so this only catches direct merges.
 //
 // Design choices:
@@ -25,8 +25,8 @@ import { execSync } from "node:child_process";
 function allow() { process.exit(0); } // emit nothing => default permission flow
 function deny(reason) {
   process.stdout.write(JSON.stringify({
-    hookEventName: "PreToolUse",
     hookSpecificOutput: {
+      hookEventName: "PreToolUse",
       permissionDecision: "deny",
       permissionDecisionReason: reason,
     },
@@ -75,7 +75,7 @@ function main() {
   } catch {
     return deny(
       "Blocked: no design-check proofs found (notes/design-harness/proofs/ is " +
-      "missing). Run /design-check before merging into " + branch + "."
+      "missing). Run /design-harness:design-check before merging into " + branch + "."
     );
   }
 
@@ -100,7 +100,7 @@ function main() {
   if (passing) return allow();
   return deny(
     `Blocked: no passing design-check proof in the last ${maxAgeMin} min ` +
-    `(need a report.md with "FAIL: 0"). Run /design-check, then merge. ` +
+    `(need a report.md with "FAIL: 0"). Run /design-harness:design-check, then merge. ` +
     `Override a non-design merge with DESIGN_HARNESS_SKIP_GATE=1.`
   );
 }

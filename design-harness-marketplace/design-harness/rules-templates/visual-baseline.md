@@ -2,7 +2,7 @@
 
 Portable, project-agnostic design standards. This file rarely changes — it is the
 floor every screen must clear before project-specific design-system rules apply.
-It is loaded on every session via `CLAUDE.md` and checked by `/design-check`.
+It is loaded on every session via `CLAUDE.md` and checked by `/design-harness:design-check`.
 
 Each rule has a stable ID and a check type:
 
@@ -10,8 +10,8 @@ Each rule has a stable ID and a check type:
 - `[auto:src]` — verifiable by grepping the source.
 - `[judge]` — requires Claude's judgment from screenshots/GIFs (subjective).
 
-`/design-check` evaluates `[auto:*]` rules deterministically and `[judge]` rules
-from the captured proof. A FAIL on any rule blocks `/approve` until fixed or the
+`/design-harness:design-check` evaluates `[auto:*]` rules deterministically and `[judge]` rules
+from the captured proof. A FAIL on any rule blocks `/design-harness:approve` until fixed or the
 rule is explicitly waived in the report.
 
 ---
@@ -49,7 +49,7 @@ rule is explicitly waived in the report.
 
 - **VB-10 [auto:dom]** — Every clickable element (`onclick`, `role="button"`,
   links, menu items) has `cursor: pointer`. *(Common regression — the kind of
-  silent miss `/design-check` is built to catch.)*
+  silent miss `/design-harness:design-check` is built to catch.)*
 - **VB-11 [judge]** — Interactive elements have visible hover and active states.
 
 ## Focus & keyboard

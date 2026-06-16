@@ -1,6 +1,6 @@
 ---
 name: design-check
-description: Use to verify UI work before approval. Starts the dev server, captures a Playwright proof (GIF for interactive changes, screenshots for static), checks the live page against the visual baseline and design-system rules using both deterministic checks and visual judgment, and writes a PASS/FAIL design-check report in the fixed format. Run automatically after finishing a build on a worktree, or explicitly as /design-check.
+description: Use to verify UI work before approval. Starts the dev server, captures a Playwright proof (GIF for interactive changes, screenshots for static), checks the live page against the visual baseline and design-system rules using both deterministic checks and visual judgment, and writes a PASS/FAIL design-check report in the fixed format. Run automatically after finishing a build on a worktree, or explicitly as /design-harness:design-check.
 allowed-tools:
   - Bash
   - Read
@@ -15,11 +15,11 @@ Produce a trustworthy, reproducible verdict on UI work, backed by a proof folder
 Verification is **hybrid**: deterministic where possible, judged where it isn't.
 
 This skill is also the verification step at a **USER-TEST gate** — driven by the
-harness's own `/design-feature` orchestrator, or by any other workflow you run. It
+harness's own `/design-harness:design-feature` orchestrator, or by any other workflow you run. It
 is the structured, proof-backed form of "run Playwright + ui-ux-pro-max and confirm
 it works": `proof.mjs` is the Playwright run, and step 3 consults ui-ux-pro-max for
 the design-intelligence judgment. When invoked at a gate, return a clean PASS/FAIL
-so the orchestrator can proceed (`/approve`) or halt.
+so the orchestrator can proceed (`/design-harness:approve`) or halt.
 
 ## 0. Preconditions
 - Confirm you are on a feature **worktree/branch**, not the base branch
@@ -149,12 +149,12 @@ proof/preview links.
 
 ## 5. Report to the user
 Print the report and the `file://` proof link in chat. Then:
-- **FAIL > 0** → list each failure with a concrete fix. Do not suggest `/approve`.
+- **FAIL > 0** → list each failure with a concrete fix. Do not suggest `/design-harness:approve`.
 - **FAIL = 0** → say it's clean and ready, and that they can poke the live preview
-  or run `/approve` to merge and fold learnings back into the rules.
+  or run `/design-harness:approve` to merge and fold learnings back into the rules.
 
-Never merge here. Approval is always an explicit, separate `/approve`.
+Never merge here. Approval is always an explicit, separate `/design-harness:approve`.
 
-**At an orchestrator gate (`/design-feature` or your own):** report the same way,
+**At an orchestrator gate (`/design-harness:design-feature` or your own):** report the same way,
 then return the verdict — `FAIL: 0` clears the USER-TEST gate (the orchestrator may
-proceed to `/approve`); any failure halts with the failures surfaced.
+proceed to `/design-harness:approve`); any failure halts with the failures surfaced.

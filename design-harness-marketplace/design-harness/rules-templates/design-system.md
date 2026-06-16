@@ -2,19 +2,19 @@
 
 This file is the project's living design system **and** its design test suite.
 Unlike `visual-baseline.md` (portable, rarely changes), this file **grows during
-the design process**: every time you `/approve` work, any durable decision made
-along the way is appended here as a rule. On the next `/design-check`, those
+the design process**: every time you `/design-harness:approve` work, any durable decision made
+along the way is appended here as a rule. On the next `/design-harness:design-check`, those
 rules are checked like any other. This is how a one-off design decision becomes a
 permanent guardrail instead of a forgotten note.
 
 ## Lifecycle
 
-1. `/explore` or `design-context` surfaces a decision (e.g. "Add-to-X opens a
+1. `/design-harness:explore` or `design-context` surfaces a decision (e.g. "Add-to-X opens a
    popover, never navigates").
-2. You build it; `/design-check` proves it.
-3. `/approve` appends it here as a `DS-*` rule and logs the rationale in
+2. You build it; `/design-harness:design-check` proves it.
+3. `/design-harness:approve` appends it here as a `DS-*` rule and logs the rationale in
    `notes/session-log.md`.
-4. Future `/design-check` runs enforce it. If a rule turns out wrong, change its
+4. Future `/design-harness:design-check` runs enforce it. If a rule turns out wrong, change its
    `status` to `deprecated` (don't delete — keep the history).
 
 ## Entry format
@@ -24,7 +24,7 @@ permanent guardrail instead of a forgotten note.
 - status: active | proposed | deprecated
 - since: <YYYY-MM-DD> (commit <sha>)
 - rule: <one sentence, testable>
-- check: <how /design-check verifies it>
+- check: <how /design-harness:design-check verifies it>
     - [auto:dom] <selector/assertion>  e.g. `[data-add-action] => opens [role=dialog], no navigation`
     - [auto:src] <grep/pattern>
     - [judge] <what to look for in the proof>
@@ -53,4 +53,4 @@ permanent guardrail instead of a forgotten note.
   silent inconsistency. See session-log 2026-05-07 license-dropup.
 - applies-to: /library, any "add to <container>" control
 
-<!-- New DS-* rules are appended below by /approve. Keep them small and testable. -->
+<!-- New DS-* rules are appended below by /design-harness:approve. Keep them small and testable. -->

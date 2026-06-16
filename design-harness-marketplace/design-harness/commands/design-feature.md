@@ -1,5 +1,5 @@
 ---
-description: End-to-end design-harness workflow — analyze, scope, design UX, build on a worktree, prove with /design-check, and /approve to harden the rules. Self-contained and resume-safe. A standalone alternative you can run and compare against your own pipeline.
+description: End-to-end design-harness workflow — analyze, scope, design UX, build on a worktree, prove with /design-harness:design-check, and /design-harness:approve to harden the rules. Self-contained and resume-safe. A standalone alternative you can run and compare against your own pipeline.
 argument-hint: "<feature description | file path | Figma URL>"
 disable-model-invocation: true
 allowed-tools:
@@ -18,7 +18,7 @@ allowed-tools:
   - WebFetch
 ---
 
-# /design-feature — the harness, end to end
+# /design-harness:design-feature — the harness, end to end
 
 **Persona:** 50% Principal Product Designer, 25% Chief AI Engineer, 25% Expert
 Prompt Engineer. Think step by step.
@@ -28,8 +28,8 @@ not depend on, read, or modify any other workflow you have. It chains the harnes
 own pieces; it does not reimplement them.
 
 ```
-idea ─▶ design-context (spec) ─▶ [/explore variants] ─▶ build (worktree)
-     ─▶ /design-check (USER-TEST gate) ─▶ /approve ─▶ rules hardened
+idea ─▶ design-context (spec) ─▶ [/design-harness:explore variants] ─▶ build (worktree)
+     ─▶ /design-harness:design-check (USER-TEST gate) ─▶ /design-harness:approve ─▶ rules hardened
 ```
 
 `$ARGUMENTS` is an optional seed — a feature description, a file path, or a Figma
@@ -57,7 +57,7 @@ Announce the detected state and the planned start in 3–5 lines. No preamble.
 
 ## Step 2: Spec — analyze → scope → UX
 
-Invoke the spec skill: `Skill: design-context` (pass `$ARGUMENTS` as seed). It reads
+Invoke the spec skill: `Skill: design-harness:design-context` (pass `$ARGUMENTS` as seed). It reads
 the rules, resolves gaps with AskUserQuestion, and writes a structured spec to
 `notes/design-harness/specs/<slug>.md`: refined requirements, scoped features with
 **acceptance criteria** (checkboxes) + Must/Should/Could, UX flows with per-screen
@@ -66,7 +66,7 @@ the rules, resolves gaps with AskUserQuestion, and writes a structured spec to
 If a spec already exists, design-context applies the use-as-is / delta-update /
 backup-replace / review discipline — never clobber a reviewed spec.
 
-Optional divergence: if the direction is non-obvious, `SlashCommand: /explore <goal>`
+Optional divergence: if the direction is non-obvious, `SlashCommand: /design-harness:explore <goal>`
 to fan out variants, then reconverge before building.
 
 ---
@@ -87,7 +87,7 @@ that would touch the same files.
 
 ## Step 4: Prove (USER-TEST gate)
 
-`SlashCommand: /design-check` on the worktree. It serves the work per the spec's
+`SlashCommand: /design-harness:design-check` on the worktree. It serves the work per the spec's
 **build mode** (`standalone-html` | `nextjs` | `fullstack`), captures the Playwright
 proof, runs axe + the DOM audit, consults ui-ux-pro-max, verifies the acceptance
 criteria, and writes the `design-check report`.
@@ -99,7 +99,7 @@ return to Step 3. Do not proceed.
 
 ## Step 5: Approve
 
-On a clean gate, `SlashCommand: /approve "<slug>: what & why"`. It merges the branch
+On a clean gate, `SlashCommand: /design-harness:approve "<slug>: what & why"`. It merges the branch
 (the proof-gate hook enforces the passing proof), appends to `notes/session-log.md`,
 and hardens durable decisions + acceptance criteria into `design-system.md` via the
 doc-update discipline. Approval is never automatic — confirm before running it.
@@ -113,7 +113,7 @@ At a batch boundary, a USER-TEST gate, or completion:
 - branch + merge sha + any new `DS-*` rules,
 - failures / skips + reasons,
 - the next gate's `design-check` report with `file://` proof links, inline,
-- resume command: `/design-feature` (auto-detects state and continues).
+- resume command: `/design-harness:design-feature` (auto-detects state and continues).
 
 No per-step chatter — only at boundaries.
 
@@ -122,10 +122,10 @@ No per-step chatter — only at boundaries.
 ## Invariants
 
 - **Self-contained.** Never reads or edits any other workflow's files.
-- **Delegate, don't reimplement** — chain `design-context`, `/explore`,
-  `/design-check`, `/approve`. 
+- **Delegate, don't reimplement** — chain `design-context`, `/design-harness:explore`,
+  `/design-harness:design-check`, `/design-harness:approve`. 
 - **Announce every stage decision**; be resume-safe.
 - **Max 3 parallel agents.**
-- **Gate before merge** — never merge without a `FAIL: 0` proof; `/approve` does the
+- **Gate before merge** — never merge without a `FAIL: 0` proof; `/design-harness:approve` does the
   merge and is itself proof-gated.
 - **AskUserQuestion at real forks** — scope, variant choice, approval.

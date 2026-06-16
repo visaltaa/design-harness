@@ -9,7 +9,7 @@ allowed-tools:
   - Grep
 ---
 
-# /approve — merge, log, and loop learnings back (Layer 3 → Layers 1/2)
+# /design-harness:approve — merge, log, and loop learnings back (Layer 3 → Layers 1/2)
 
 This is the only step that mutates the base branch and the rule files. It is
 user-invoked only. Approval note (optional): **$ARGUMENTS**
@@ -25,7 +25,7 @@ Current state (injected):
 ### 1. Gate on a passing proof
 Open the latest proof folder's `report.md`. Proceed only if it corresponds to the
 current branch/HEAD and shows **FAIL: 0**. If there is no proof, it's stale, or it
-has failures, STOP and tell the user to run `/design-check` first. (A `git merge`
+has failures, STOP and tell the user to run `/design-harness:design-check` first. (A `git merge`
 hook also enforces this, but check here so we fail fast and clearly.)
 
 ### 2. Merge
@@ -74,10 +74,10 @@ Apply it per file:
 - **visual-baseline.md** — touch ONLY for a genuinely portable rule, and ask first.
 
 Also graduate any **feature acceptance criteria** that proved durable: move them
-from the brief / `2-features.md` into `DS-*` checks, so the next `/design-check`
+from the brief / `2-features.md` into `DS-*` checks, so the next `/design-harness:design-check`
 enforces "done" for this feature automatically.
 
 ### 5. Confirm
 Summarize in chat: what merged (merge sha), which `DS-*` rules were added/updated,
 the product-context updates, and the session-log entry. Note that the next
-`/design-check` will enforce the new rules.
+`/design-harness:design-check` will enforce the new rules.

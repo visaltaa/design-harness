@@ -18,13 +18,15 @@ run `claude plugin marketplace add <owner>/<repo>`.
 ## 2. Set up a project repo
 
 ```bash
+# point HARNESS at the plugin bundle you cloned (holds rules-templates/, templates/, scripts/)
+HARNESS=/absolute/path/to/design-harness-marketplace/design-harness
+
 # 1. drop the three rule files where CLAUDE.md / the skills expect them
 mkdir -p .claude/rules
-cp "$(claude plugin path design-harness)"/rules-templates/*.md .claude/rules/
-#   (or copy from this bundle's design-harness/rules-templates/)
+cp "$HARNESS"/rules-templates/*.md .claude/rules/
 
 # 2. wire the always-on baseline: append the snippet to your CLAUDE.md
-cat "$(claude plugin path design-harness)"/templates/CLAUDE.snippet.md >> CLAUDE.md
+cat "$HARNESS"/templates/CLAUDE.snippet.md >> CLAUDE.md
 
 # 3. install the proof toolchain
 npm i -D playwright && npx playwright install chromium
@@ -49,22 +51,22 @@ cd ../wt-my-feature
 In Claude Code:
 
 1. Describe the work. `design-context` should fire — answer its questions.
-   Optionally `/explore my idea n=3` to compare variants, then reconverge.
+   Optionally `/design-harness:explore my idea n=3` to compare variants, then reconverge.
 2. Build it.
-3. `/design-check` — it starts the dev server, captures the proof to
+3. `/design-harness:design-check` — it starts the dev server, captures the proof to
    `notes/design-harness/proofs/<date-slug>/`, verifies against the rules, and
    prints the `design-check report` with a `file://` proof link and a live preview.
-4. If clean (`FAIL: 0`), run `/approve "what & why"`. It merges, appends to
+4. If clean (`FAIL: 0`), run `/design-harness:approve "what & why"`. It merges, appends to
    `notes/session-log.md`, and adds any new `DS-*` rules to your design system.
 
 ## Verifying the proof script directly
 
 ```bash
-# sanity check the report format without a browser
-node "$(claude plugin path design-harness)"/scripts/proof.mjs --selftest
+# sanity check the report format without a browser ($HARNESS from step 2 above)
+node "$HARNESS"/scripts/proof.mjs --selftest
 
 # a real capture (dev server must be running)
-node .../scripts/proof.mjs --url http://localhost:3000/library \
+node "$HARNESS"/scripts/proof.mjs --url http://localhost:3000/library \
   --route /library --mode interactive --slug library-dropup --base main --pid <devpid>
 ```
 

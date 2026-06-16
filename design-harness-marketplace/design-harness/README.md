@@ -13,26 +13,26 @@ steers Claude.
 | Layer | Job | How it's encoded |
 |------|-----|------------------|
 | **1 · Visual** | A portable baseline + an evolving design system that hardens into a test suite | `CLAUDE.md` (always-on) + `rules/visual-baseline.md` + `rules/design-system.md` |
-| **2 · Context** | Sense new work, interrogate you, fan out variants before converging | `design-context` skill (auto-fires) + `/explore` + `rules/product-context.md` |
-| **3 · Agentic** | Build on a worktree → prove → verify → approve, then loop learnings back up | `design-check` skill + `/approve` + `hooks/` + `scripts/proof.mjs` |
+| **2 · Context** | Sense new work, interrogate you, fan out variants before converging | `design-context` skill (auto-fires) + `/design-harness:explore` + `rules/product-context.md` |
+| **3 · Agentic** | Build on a worktree → prove → verify → approve, then loop learnings back up | `design-check` skill + `/design-harness:approve` + `hooks/` + `scripts/proof.mjs` |
 
 ## The loop
 
 ```
-new work ─▶ design-context (sense, AskUserQuestion) ─▶ [/explore variants] ─▶ reconverge
+new work ─▶ design-context (sense, AskUserQuestion) ─▶ [/design-harness:explore variants] ─▶ reconverge
               │
               ▼
         build on a worktree/branch
               │
               ▼
-        /design-check ──▶ start dev server ──▶ Playwright proof (GIF/screenshots)
+        /design-harness:design-check ──▶ start dev server ──▶ Playwright proof (GIF/screenshots)
               │                                  ├─ deterministic: axe + DOM audit + source greps
               │                                  └─ judged: hierarchy, mirroring, DS-* rules
               ▼
         design-check report  (PASS: n · FAIL: m, proof folder, live preview)
               │
        ┌──────┴───────┐
-   you correct      /approve ──▶ merge ──▶ session-log ──▶ update design-system.md
+   you correct      /design-harness:approve ──▶ merge ──▶ session-log ──▶ update design-system.md
    the work                                                  + product-context.md
                                                               (new DS-* rules become
                                                                the next check's test suite)
@@ -43,13 +43,13 @@ new work ─▶ design-context (sense, AskUserQuestion) ─▶ [/explore variant
 - **Always-on:** the visual baseline, loaded via `CLAUDE.md`.
 - **Auto-fires:** `design-context` when Claude senses new/unscoped UI work.
   `design-check` can also run automatically at the end of a build.
-- **You invoke (explicit):** `/explore`, `/design-check`, `/approve`. `/approve`
+- **You invoke (explicit):** `/design-harness:explore`, `/design-harness:design-check`, `/design-harness:approve`. `/design-harness:approve`
   is user-only and never auto-runs — it's the one step that mutates the base
   branch and the rules.
 
 ## Verification is hybrid
 
-`/design-check` proves work two ways and a rule must clear both kinds that apply:
+`/design-harness:design-check` proves work two ways and a rule must clear both kinds that apply:
 
 - **Deterministic** (`[auto:*]` rules): axe-core (contrast, names, headings),
   a baseline DOM audit (pointer cursor, ≥44px targets, focus-visible, alt text),
@@ -60,20 +60,20 @@ new work ─▶ design-context (sense, AskUserQuestion) ─▶ [/explore variant
 
 ## How a decision becomes a test
 
-This is the point of the harness. When you `/approve`, any durable decision is
+This is the point of the harness. When you `/design-harness:approve`, any durable decision is
 appended to `rules/design-system.md` as a `DS-NNN` rule with a concrete `check`
-(a DOM assertion, a source grep, or a judgment prompt). The next `/design-check`
+(a DOM assertion, a source grep, or a judgment prompt). The next `/design-harness:design-check`
 enforces it. Rules are never deleted — wrong ones are marked `deprecated`, so the
 design system carries its own history.
 
-## End-to-end workflow: `/design-feature`
+## End-to-end workflow: `/design-harness:design-feature`
 
-The harness runs as a complete, self-contained workflow via **`/design-feature`** —
+The harness runs as a complete, self-contained workflow via **`/design-harness:design-feature`** —
 a resume-safe orchestrator that takes a feature from idea to shipped-and-proven:
 
 ```
-idea → design-context (spec) → [/explore] → build on a worktree
-     → /design-check (USER-TEST gate) → /approve → rules hardened
+idea → design-context (spec) → [/design-harness:explore] → build on a worktree
+     → /design-harness:design-check (USER-TEST gate) → /design-harness:approve → rules hardened
 ```
 
 It bakes in the practices worth keeping from a mature pipeline — a product-design
@@ -119,12 +119,16 @@ design-harness/
 
 ## Commands & skills
 
-- **`/design-feature <seed>`** — run the whole workflow end to end (resume-safe).
+Plugin commands and skills are namespaced under the plugin name, so every
+invocation is prefixed with `design-harness:` (e.g. `/design-harness:approve`).
+The bare names below are the same commands without the prefix.
+
+- **`/design-harness:design-feature <seed>`** — run the whole workflow end to end (resume-safe).
 - **`design-context`** (skill) — grounds new work in the rules, asks what's
-  unknown, writes the spec. Also invocable as `/design-context`.
-- **`/explore <thing> [n=3]`** — fan out N distinct variants, compare, reconverge.
-- **`/design-check`** (skill) — capture proof, verify, write the report.
-- **`/approve [note]`** — merge the worktree, log, and fold learnings into the rules.
+  unknown, writes the spec. Also invocable as `/design-harness:design-context`.
+- **`/design-harness:explore <thing> [n=3]`** — fan out N distinct variants, compare, reconverge.
+- **`/design-harness:design-check`** (skill) — capture proof, verify, write the report.
+- **`/design-harness:approve [note]`** — merge the worktree, log, and fold learnings into the rules.
 
 See `INSTALL.md` to set it up. Tune the proof-gate with `DESIGN_HARNESS_BASE`,
 `DESIGN_HARNESS_PROOF_MAX_AGE_MIN`, and `DESIGN_HARNESS_SKIP_GATE=1`.

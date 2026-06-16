@@ -2,7 +2,7 @@
 
 What we are building and why. The `design-context` skill reads this to ground new
 work, asks you about anything missing (via AskUserQuestion), and proposes updates.
-`/approve` promotes proposed updates to confirmed. Keep it current — this is the
+`/design-harness:approve` promotes proposed updates to confirmed. Keep it current — this is the
 brief every design decision is measured against.
 
 ## Build & dev defaults
@@ -50,6 +50,6 @@ _TODO: describe the product._
 
 ---
 
-## Pending briefs (proposed by design-context / explore — promoted on /approve)
+## Pending briefs (proposed by design-context / explore — promoted on /design-harness:approve)
 <!-- design-context appends a short brief here when you start new work. It stays
-     "proposed" until /approve folds it into the sections above. -->
+     "proposed" until /design-harness:approve folds it into the sections above. -->
