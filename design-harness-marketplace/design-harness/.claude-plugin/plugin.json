@@ -3,9 +3,10 @@
   "description": "Agentic design harness: a portable visual baseline, an evolving design system that hardens into a test suite, product-context sensing, and a worktree -> build -> Playwright-proof -> verify -> approve loop. Approvals feed learnings back into the rules.",
   "version": "0.1.0",
   "author": {
-    "name": "Visal",
+    "name": "Visal Medepalli",
     "email": "visal@thirdaiautomation.com"
   },
+  "license": "MIT",
   "keywords": [
     "design",
     "design-system",
